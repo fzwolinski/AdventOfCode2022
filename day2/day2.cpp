@@ -1,3 +1,5 @@
+#include "helpers.h"
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -33,7 +35,7 @@ std::map<Short, Shape> shapeMap {
 //                         oponent  me
 using TurnPair = std::pair<Shape,   Shape>;
 
-std::vector<TurnPair> strategyGuide(std::ifstream& file);
+std::vector<TurnPair> parseFileData(const std::vector<std::string> &fileData);
 Shape getShapeFromShort(const Short &_short);
 unsigned int getPointsForShape(const Shape& s);
 unsigned int getPointsForRoundOutcome(const TurnPair &round);
@@ -43,12 +45,13 @@ Shape iShouldPlay(const TurnPair &round);
 int main() {
   std::ifstream file("day2_input.txt");
 
-  if(!file.is_open()) {
+  if (!file.is_open()) {
     return -1;
   }
 
-  auto strategy = strategyGuide(file);
-  
+  std::vector<std::string> fileData = readFileLineByLine(file);
+  std::vector<TurnPair> strategy = parseFileData(fileData);
+ 
   unsigned int scoreStrategyGuide{0u};
   unsigned int scoreDesiredOutcome{0u};
   
@@ -64,19 +67,18 @@ int main() {
   return 0;
 }
 
-std::vector<TurnPair> strategyGuide(std::ifstream& file) {
+std::vector<TurnPair> parseFileData(const std::vector<std::string> &data) {
   std::vector<TurnPair> strategyGuide;
-  std::string fileLine;
-  while(std::getline(file, fileLine)) {
-    std::istringstream iss(fileLine);
+  
+  for (auto &line : data) {
+    std::istringstream iss(line);
     Short myChoice, opponentChoice;
-    if((iss >> myChoice >> opponentChoice)) {
+    if (iss >> myChoice >> opponentChoice) {
       strategyGuide.push_back({getShapeFromShort(myChoice), 
                                getShapeFromShort(opponentChoice)});
-    } else {
-      break;
     }
   }
+
   return strategyGuide;
 }
 

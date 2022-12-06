@@ -1,3 +1,5 @@
+#include "helpers.h"
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -5,38 +7,8 @@
 #include <string>
 #include <vector>
 
-std::vector<int> eachReindeerCalories(std::ifstream& file) {
-  std::string fileLine;
-  std::vector<int> reindeers;
-  int currReindeerCalories{0};
-
-  while(std::getline(file, fileLine)) {
-    std::istringstream iss(fileLine);
-    int lineNum;
-    if(!(iss >> lineNum)) {
-      reindeers.push_back(currReindeerCalories);
-      currReindeerCalories = 0;
-      continue;
-    }
-    currReindeerCalories += lineNum;
-  }
-
-  // Process last line
-  reindeers.push_back(currReindeerCalories);    
-  
-  return reindeers;
-}
-
-int getTopThreeSum(std::vector<int> const &sortedVec) {
-  int topThreeSum{0};
-
-  const size_t vecSize = sortedVec.size();
-  topThreeSum += sortedVec.at(vecSize-1);
-  topThreeSum += sortedVec.at(vecSize-2);
-  topThreeSum += sortedVec.at(vecSize-3);
-
-  return topThreeSum;
-}
+std::vector<int> eachReindeerCalories(const std::vector<std::string> &data);
+int getTopThreeSum(std::vector<int> const &sortedVec);
 
 int main() {
   std::ifstream file("day1_input.txt");
@@ -45,7 +17,8 @@ int main() {
     return -1;
   }
 
-  std::vector<int> reindeerCalories = eachReindeerCalories(file); 
+  std::vector<std::string> fileData = readFileLineByLine(file);
+  std::vector<int> reindeerCalories = eachReindeerCalories(fileData); 
   std::sort(reindeerCalories.begin(), reindeerCalories.end());
 
   const int maxCalories = reindeerCalories.back();
@@ -65,5 +38,37 @@ int main() {
   }
 
   return 0;
+}
+
+int getTopThreeSum(std::vector<int> const &sortedVec) {
+  int topThreeSum{0};
+
+  const size_t vecSize = sortedVec.size();
+  topThreeSum += sortedVec.at(vecSize-1);
+  topThreeSum += sortedVec.at(vecSize-2);
+  topThreeSum += sortedVec.at(vecSize-3);
+
+  return topThreeSum;
+}
+
+std::vector<int> eachReindeerCalories(const std::vector<std::string> &data) {
+  std::vector<int> reindeers;
+  int currReindeerCalories{0};
+  std::string line{data.front()};
+
+  for (size_t i = 0; i < data.size(); i++) {
+    line = data[i];
+    int lineNum;
+    std::istringstream iss(line);
+    if (!(iss >> lineNum)) {
+      reindeers.push_back(currReindeerCalories);
+      currReindeerCalories = 0;
+      continue;
+    }
+    currReindeerCalories += lineNum;
+  }
+
+  reindeers.push_back(currReindeerCalories);  
+  return reindeers;
 }
 
