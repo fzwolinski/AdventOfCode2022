@@ -15,3 +15,6 @@ configure_file(day3/input.txt day3_input.txt COPYONLY)
 
 add_executable(day4 day4/day4.cpp)
 configure_file(day4/input.txt day4_input.txt COPYONLY)
+
+add_executable(day5 day5/day5.cpp)
+configure_file(day5/input.txt day5_input.txt COPYONLY)

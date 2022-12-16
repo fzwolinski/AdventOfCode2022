@@ -16,6 +16,15 @@ bool strContainsChar(std::string s, char c) {
   return s.find(c) != std::string::npos;
 }
 
+bool containsNum(const std::string& str) {
+  for (const char& c : str) {
+    if (isdigit(c)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 std::vector<std::string> splitStr(const std::string& fullString, 
                                   const std::string& delimiter) {
   std::vector<std::string> outList;
