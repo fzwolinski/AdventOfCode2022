@@ -16,6 +16,24 @@ bool strContainsChar(std::string s, char c) {
   return s.find(c) != std::string::npos;
 }
 
+std::vector<std::string> splitStr(const std::string& fullString, 
+                                  const std::string& delimiter) {
+  std::vector<std::string> outList;
+  const auto& d = delimiter;
+
+  std::string toSplit = fullString;
+  size_t pos = toSplit.find(d);
+  while (std::string::npos != pos) {
+    outList.push_back(toSplit.substr(0, pos));
+    toSplit.erase(0, pos + d.length());
+    pos = toSplit.find(d);
+  }
+
+  outList.push_back(toSplit.substr(0, toSplit.find(d)));
+
+  return outList;
+}
+
 std::vector<char> getSharedUniqueCharacters(std::vector<std::string> strings) {
   const auto& firstStr = strings[0];
   std::vector<char> sharedChars;
