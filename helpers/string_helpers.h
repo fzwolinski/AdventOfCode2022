@@ -69,3 +69,14 @@ std::vector<char> getSharedUniqueCharacters(std::vector<std::string> strings) {
   return sharedChars;
 }
 
+bool allUniqueChars(const std::string& str) {
+  std::vector<char> vecStr(str.begin(), str.end());
+
+  sort(vecStr.begin(), vecStr.end());
+  
+  auto it = std::unique(vecStr.begin(), vecStr.end());
+  vecStr.resize(std::distance(vecStr.begin(), it));
+
+  return vecStr.size() == str.length();
+}
+

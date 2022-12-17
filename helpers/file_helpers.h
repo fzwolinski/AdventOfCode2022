@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <vector>
 
 std::vector<std::string> readFileLineByLine(std::ifstream &file) {
@@ -14,4 +15,9 @@ std::vector<std::string> readFileLineByLine(std::ifstream &file) {
   return fileData;
 }
 
+std::string readFileBuffer(const std::ifstream &file) {
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+  return buffer.str();
+}
 
