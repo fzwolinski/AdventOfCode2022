@@ -16,7 +16,8 @@ const unsigned int NUM_OF_STACKS = 9;
 
 void pushCratesToStacks(std::vector<std::vector<std::string>>& stacks, const std::string& str);
 move parseMoveLine(const std::string& line);
-void makeMove(std::vector<std::vector<std::string>>& stacks, move currMove);
+void makeMove9000(std::vector<std::vector<std::string>>& stacks, move currMove);
+void makeMove9001(std::vector<std::vector<std::string>>& stacks, move currMove);
 std::string getTopStacksMsg(const std::vector<std::vector<std::string>>& stacks);
 
 int main() {
@@ -52,18 +53,23 @@ int main() {
   }
 
   std::reverse(stacksRawData.begin(), stacksRawData.end());
-  std::vector<std::vector<std::string>> stacks(NUM_OF_STACKS + 1); // index 1-9
+  std::vector<std::vector<std::string>> stacks9000(NUM_OF_STACKS + 1); // index 1-9
+  std::vector<std::vector<std::string>> stacks9001(NUM_OF_STACKS + 1); // index 1-9
   for (const auto& line : stacksRawData) {
-    pushCratesToStacks(stacks, line);
+    pushCratesToStacks(stacks9000, line);
+    pushCratesToStacks(stacks9001, line);
   }
 
   for (const auto& m : movesRawData) {
     auto currMove = parseMoveLine(m);
-    makeMove(stacks, currMove);
+    makeMove9000(stacks9000, currMove);
+    makeMove9001(stacks9001, currMove);
   }
 
-  auto topStacksMsg = getTopStacksMsg(stacks);
-  std::cout << "Top stacks message: " << topStacksMsg << "\n";
+  auto topStacks9000Msg = getTopStacksMsg(stacks9000);
+  auto topStacks9001Msg = getTopStacksMsg(stacks9001);
+  std::cout << "Top stacks CrateMover 9000 message: " << topStacks9000Msg << "\n";
+  std::cout << "Top stacks CrateMover 9001 message: " << topStacks9001Msg << "\n";
 
   return 0;
 }
@@ -97,7 +103,7 @@ move parseMoveLine(const std::string& line) {
   return std::make_tuple(numOfCrates, from, to);
 }
 
-void makeMove(std::vector<std::vector<std::string>>& stacks, move currMove) {
+void makeMove9000(std::vector<std::vector<std::string>>& stacks, move currMove) {
   unsigned int numOfCrates = std::get<0>(currMove);
   unsigned int from = std::get<1>(currMove);
   unsigned int to = std::get<2>(currMove);
@@ -106,6 +112,25 @@ void makeMove(std::vector<std::vector<std::string>>& stacks, move currMove) {
   for (size_t i = 0; i < numOfCrates; i++) {
     stacks[to].push_back(stacks[from][cratesOnStack - 1 - i]);
     stacks[from].pop_back();
+  }
+}
+
+void makeMove9001(std::vector<std::vector<std::string>>& stacks, move currMove) {
+  unsigned int numOfCrates = std::get<0>(currMove);
+  unsigned int from = std::get<1>(currMove);
+  unsigned int to = std::get<2>(currMove);
+
+  std::vector<std::string> movedStacks;
+  size_t cratesOnStack = stacks[from].size();
+  for (size_t i = 0; i < numOfCrates; i++) {
+    movedStacks.push_back(stacks[from][cratesOnStack - 1 - i]);
+    stacks[from].pop_back();
+  }
+
+  std::reverse(movedStacks.begin(), movedStacks.end());
+
+  for (const auto& movedStack : movedStacks) {
+    stacks[to].push_back(movedStack);
   }
 }
 
