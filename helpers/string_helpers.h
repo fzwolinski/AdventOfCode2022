@@ -12,6 +12,10 @@ std::pair<std::string, std::string> splitStringInHalf(std::string input) {
   return std::make_pair(first, second);
 }
 
+bool hasSubStr(const std::string str, const std::string subStr) {
+  return str.find(subStr) != std::string::npos;
+}
+
 bool strContainsChar(std::string s, char c) {
   return s.find(c) != std::string::npos;
 }
